@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:PV/home.dart';
 
@@ -16,12 +17,18 @@ const BoxDecoration globalBackgroundDecoration = BoxDecoration(
   ),
 );
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(const VerbsioApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class VerbsioApp extends StatelessWidget {
+  const VerbsioApp({super.key});
 
   @override
   Widget build(BuildContext context) {

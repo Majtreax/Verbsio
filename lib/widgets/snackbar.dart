@@ -45,7 +45,7 @@ SnackBar buildFeedbackSnackBar({
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: fontSize * 0.75,
+                    fontSize: fontSize * 0.85,
                     fontWeight: FontWeight.bold,
                     color: textColor,
                   ),
@@ -58,7 +58,7 @@ SnackBar buildFeedbackSnackBar({
               choice ?? '',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: fontSize * 0.75,
+                fontSize: fontSize * 0.85,
                 fontWeight: FontWeight.bold,
                 decoration: TextDecoration.underline,
                 height: 1.5,
@@ -69,7 +69,7 @@ SnackBar buildFeedbackSnackBar({
             question.question,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: fontSize * 0.75,
+              fontSize: fontSize * 0.85,
               color: Colors.pink[50],
               fontWeight: FontWeight.bold,
               height: 1.5,
@@ -80,7 +80,7 @@ SnackBar buildFeedbackSnackBar({
               question.examples[0],
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: fontSize * 0.75,
+                fontSize: fontSize * 0.85,
                 color: Colors.pink[100],
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
