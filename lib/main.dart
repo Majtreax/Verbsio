@@ -3,20 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:PV/home.dart';
 
-const BoxDecoration globalBackgroundDecoration = BoxDecoration(
-  gradient: LinearGradient(
-    begin: Alignment.bottomLeft,
-    end: Alignment.topRight,
-    colors: [
-      Color(0xff4e3a7d),
-      Color(0xff6f4aa5),
-      Color(0xff9c6dc2),
-      Color(0xffcda4de),
-      Color(0xffe9d8f7),
-    ],
-  ),
-);
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
@@ -36,6 +22,14 @@ class VerbsioApp extends StatelessWidget {
       title: 'Phrasal Verbs',
       theme: ThemeData.dark().copyWith(
         textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Roboto'),
+        cardTheme: CardTheme(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          color: Colors.black.withAlpha(100),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32),
+            side: BorderSide(color: Colors.blueGrey.withAlpha(100)),
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),

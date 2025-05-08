@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-
 import 'package:PV/assets/verb-model.dart';
 import 'package:PV/assets/verb-service.dart';
 import 'package:PV/widgets/snackbar.dart';
@@ -8,6 +7,7 @@ import 'package:PV/widgets/score.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
+
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
@@ -61,16 +61,14 @@ class _QuizPageState extends State<QuizPage> {
   void _showFeedback(BuildContext ctx, bool correct, String? choice) {
     if (!mounted) return;
     setState(() {
-      if (correct) {
-        _correctCount++;
-      } else {
-        _incorrectCount++;
-      }
+      correct ? _correctCount++ : _incorrectCount++;
     });
+
     final fbq =
         correct
             ? _currentQuestion!
             : _questions.firstWhere((q) => q.answer == choice);
+
     ScaffoldMessenger.of(ctx)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -96,6 +94,7 @@ class _QuizPageState extends State<QuizPage> {
         if (snap.hasError) {
           return Center(child: Text('Error: ${snap.error}'));
         }
+
         final data = snap.data;
         if (data == null || data.isEmpty) {
           return const Center(child: Text('No data available.'));
@@ -105,94 +104,83 @@ class _QuizPageState extends State<QuizPage> {
         if (!_questionLoaded) _setQuestion(_currentIndex);
 
         return Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600),
-            child: _buildQuizCard(fontSize),
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: _buildQuizContent(context, fontSize),
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _buildQuizCard(double fontSize) {
+  Widget _buildQuizContent(BuildContext context, double fontSize) {
     final q = _currentQuestion!;
     final choices = _choices!;
 
-    return Container(
-      padding: const EdgeInsets.all(24),
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      decoration: BoxDecoration(
-        color: Colors.black.withAlpha(100),
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.blueGrey.withAlpha(100), width: 1),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(25, 96, 125, 139),
-            blurRadius: 12,
-            spreadRadius: 2,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          q.question,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: fontSize,
+            color: Colors.orangeAccent,
+            fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
+            shadows: const [Shadow(offset: Offset(1.5, 1.5), blurRadius: 7.0)],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            q.question,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: fontSize,
-              color: Colors.orangeAccent,
-              fontWeight: FontWeight.bold,
-              shadows: const [
-                Shadow(
-                  offset: Offset(1.5, 1.5),
-                  blurRadius: 2.0,
-                  color: Color.fromARGB(60, 0, 0, 0),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 30),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children:
-                choices.map((c) {
-                  return ElevatedButton(
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 12,
+          runSpacing: 6,
+          alignment: WrapAlignment.center,
+          children:
+              choices.map((c) {
+                return ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 100,
+                    maxWidth: 200,
+                  ),
+                  child: ElevatedButton(
                     onPressed: () {
                       _showFeedback(context, c == q.answer, c);
                       if (c == q.answer) _nextQuestion();
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.orangeAccent,
-                      backgroundColor: Colors.blueAccent[900],
+                      backgroundColor: Colors.blueGrey.withAlpha(50),
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
                         vertical: 12,
+                        horizontal: 12,
                       ),
                       textStyle: TextStyle(
-                        fontSize: fontSize * 0.85,
+                        fontSize: fontSize * 0.75,
                         fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(20),
                       ),
+                      elevation: 3,
                     ),
                     child: Text(c, textAlign: TextAlign.center),
-                  );
-                }).toList(),
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ScoreCard(label: 'Correct: $_correctCount', fontSize: fontSize),
-              ScoreCard(label: 'False: $_incorrectCount', fontSize: fontSize),
-            ],
-          ),
-        ],
-      ),
+                  ),
+                );
+              }).toList(),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ScoreCard(label: 'Correct: $_correctCount', fontSize: fontSize),
+            ScoreCard(label: 'False: $_incorrectCount', fontSize: fontSize),
+          ],
+        ),
+      ],
     );
   }
 }
